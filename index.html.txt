@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMMAND THE ROOM - Executive Communications</title>
+    <style>
+        :root {
+            --bg-dark: #121214;
+            --card-bg: #1a1a1e;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: #2d2d34;
+            --track-a: #C9A84C;
+            --track-b: #7B9E87;
+            --track-c: #8B7BAB;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        header h2 {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            display: inline-block;
+            background: rgba(255,255,255,0.05);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        /* Interactive Filter Tabs */
+        .filter-section {
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+        
+        .filter-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            max-width: 280px;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active[data-track="all"] { border-color: #fff; background: rgba(255,255,255,0.1); }
+        .tab-btn.active[data-track="daily"] { border-color: var(--track-a); background: rgba(201,168,76,0.1); }
+        .tab-btn.active[data-track="alternate"] { border-color: var(--track-b); background: rgba(123,158,135,0.1); }
+        .tab-btn.active[data-track="weekend"] { border-color: var(--track-c); background: rgba(139,123,171,0.1); }
+
+        .tab-btn h4 { font-size: 1rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem;}
+        .tab-btn p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.3; }
+
+        /* Timeline / Phase Styles */
+        .phase-block {
+            margin-bottom: 4rem;
+        }
+
+        .phase-header {
+            border-left: 4px solid var(--track-a);
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .phase-badge {
+            font-size: 0.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: var(--track-a);
+        }
+
+        .phase-title {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .phase-tagline {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .week-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .week-number {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .week-theme {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: rgba(0,0,0,0.2);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .meta-item h5 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .framework-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px dashed var(--border-color);
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .framework-box h4 {
+            color: var(--track-a);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .tracks-drilldown {
+            margin-top: 1.5rem;
+        }
+
+        .track-drill-item {
+            border-left: 3px solid #fff;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .track-drill-item.daily { border-color: var(--track-a); }
+        .track-drill-item.alternate { border-color: var(--track-b); }
+        .track-drill-item.weekend { border-color: var(--track-c); }
+
+        .track-drill-item h5 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .track-drill-item ul {
+            list-style: none;
+            padding-left: 0.5rem;
+        }
+
+        .track-drill-item li {
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            color: #d1d5db;
+        }
+
+        .trench-box {
+            background: rgba(201,168,76,0.05);
+            border: 1px solid rgba(201,168,76,0.2);
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .trench-box strong {
+            color: var(--track-a);
+            display: block;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* Utility class for filter fading */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1 id="meta-title">COMMAND THE ROOM</h1>
+        <h2 id="meta-subtitle">A 3-Month Elite Executive Communications & Self-Development Course</h2>
+        <div class="tagline" id="meta-tagline">Universal · Cross-Industry · All Audiences · All Stakes</div>
+    </header>
+
+    <div class="filter-section">
+        <p class="filter-label">Filter Syllabus by Track Focus</p>
+        <div class="tabs-container" id="tracks-tabs">
+            <button class="tab-btn active" data-track="all">
+                <h4>🌐 Show All Tracks</h4>
+                <p>See the complete unified 3-month executive curriculum layout.</p>
+            </button>
+            <!-- Dynamic tracks populated by JS -->
+        </div>
+    </div>
+
+    <main id="syllabus-content">
+        <!-- Dynamic phases and weeks populated by JS -->
+    </main>
+</div>
+
+<script>
+    // The structured course data array matching your provided configuration
+    const courseData = {
+      meta: {
+        title: "COMMAND THE ROOM",
+        subtitle: "A 3-Month Elite Executive Communications & Self-Development Course",
+        tagline: "Universal · Cross-Industry · All Audiences · All Stakes",
+      },
+      tracks: [
+        {
+          id: "daily",
+          label: "Track A",
+          name: "Daily Drill",
+          schedule: "30 Min · Weekdays · 3 Months",
+          icon: "⚡",
+          color: "#C9A84C",
+          desc: "Build muscle memory through short, high-intensity daily reps."
+        },
+        {
+          id: "alternate",
+          label: "Track B",
+          name: "Deep Skill",
+          schedule: "1 Hour · Alternate Days · 3 Months",
+          icon: "🧠",
+          color: "#7B9E87",
+          desc: "Conceptual frameworks and roleplay scenarios to rewire how you think."
+        },
+        {
+          id: "weekend",
+          label: "Track C",
+          name: "Weekend Lab",
+          schedule: "2 Hours · Weekends · 3 Months",
+          icon: "🔬",
+          color: "#8B7BAB",
+          desc: "Deep-dive workshops, full rehearsals, and real-world debriefs."
+        },
+      ],
+      phases: [
+        {
+          phase: 1,
+          label: "FOUNDATION",
+          subtitle: "Months 1 — Weeks 1–4",
+          tagline: "Rewire the Inner Critic. Build the Outer Commander.",
+          color: "#C9A84C",
+          weeks: [
+            {
+              week: 1,
+              theme: "Presence Over Performance",
+              mindset: "Releasing the Perfectionism Trap",
+              skill: "Owning Physical Space & Vocal Authority",
+              framework: {
+                name: "The 3P Presence Model",
+                description: "Posture → Pause → Project. Before speaking, set your posture (feet planted, shoulders open), insert a deliberate 2-second pause, then project your first word with full breath support."
+              },
+              tracks: {
+                daily: [
+                  "Day 1–2: Mirror drill — stand in power pose for 60 sec, speak your name + role with full breath.",
+                  "Day 3–4: Record a 2-min voice memo on any topic. Listen back. Note filler words only.",
+                  "Day 5: 'Pause Practice' — in every conversation today, pause 2 seconds before responding."
+                ],
+                alternate: [
+                  "Session 1: Study Amy Cuddy's embodied cognition model. Write 3 personal triggers of perfectionism.",
+                  "Session 2: Roleplay — deliver a 5-min team update as if presenting to a C-suite. Record it.",
+                  "Session 3: Watch your recording. Score yourself only on: eye contact, pause usage, breath."
+                ],
+                weekend: [
+                  "Hour 1: Deep journaling — 'When I try to be perfect, I actually lose ____.' Write 2 pages.",
+                  "Hour 2: Full rehearsal of a real upcoming meeting/presentation using the 3P model. Video yourself."
+                ]
+              },
+              trench: "In your next real meeting — enter the room first. Stand. Don't sit until others do. Own the space silently before speaking one word."
+            },
+            {
+              week: 2,
+              theme: "The Architecture of Clarity",
+              mindset: "Conquering Disorganized Thinking Under Pressure",
+              skill: "Structuring Complex Ideas Simply",
+              framework: {
+                name: "The SCQA Framework",
+                description: "Situation → Complication → Question → Answer. Every complex message you deliver must pass through this filter. It forces clarity before you open your mouth and eliminates rambling instantly."
+              },
+              tracks: {
+                daily: [
+                  "Day 1–2: Write one SCQA statement about your current biggest work challenge. Speak it aloud.",
+                  "Day 3–4: Take any email you wrote this week and restructure it in SCQA format (3 sentences max).",
+                  "Day 5: In your next meeting, mentally apply SCQA before you raise any point."
+                ],
+                alternate: [
+                  "Session 1: Study Barbara Minto's Pyramid Principle. Map one complex work topic into a pyramid.",
+                  "Session 2: Roleplay — explain a technical concept to a 'non-expert' peer using only analogies.",
+                  "Session 3: Speed drill — 60 seconds to answer: 'What does your team actually do and why does it matter?'"
+                ],
+                weekend: [
+                  "Hour 1: Build a 'Clarity Library' — 5 complex topics you may need to explain. Write SCQA for each.",
+                  "Hour 2: Deliver all 5 explanations on video. Focus: zero jargon, one core metaphor per topic."
+                ]
+              },
+              trench: "In your next cross-functional meeting, when asked a question, begin your answer with: 'The situation is… the challenge is… so the answer is…' — even if abbreviated. Notice how jaws drop."
+            },
+            {
+              week: 3,
+              theme: "Slaying the Imposter",
+              mindset: "Imposter Syndrome → Contextual Humility",
+              skill: "Authentic Authority — Sounding Credible Without Arrogance",
+              framework: {
+                name: "The Evidence Anchor",
+                description: "Imposter syndrome shrinks you. The Evidence Anchor expands you. Before any high-stakes moment, list 3 real results you've produced. Anchor your credibility to outcomes, not titles. Speak from data, not ego."
+              },
+              tracks: {
+                daily: [
+                  "Day 1–2: Write your 'Credibility Statement' — 3 sentences: who you are, what you've done, why it matters.",
+                  "Day 3–4: Speak your credibility statement aloud each morning before work. Full voice, standing up.",
+                  "Day 5: Replace 'I think' and 'I feel' with 'The data shows' or 'My experience confirms' in all meetings."
+                ],
+                alternate: [
+                  "Session 1: Read about 'Contextual Competence' vs. fixed intelligence. Journal: where ARE you genuinely expert?",
+                  "Session 2: Roleplay — introduce yourself to a skeptical C-suite executive in 90 seconds. No titles, only outcomes.",
+                  "Session 3: Drill — answer 'Why should we trust your recommendation?' without flinching. 5 rounds."
+                ],
+                weekend: [
+                  "Hour 1: Build your personal 'Evidence File' — documented wins, feedback, measurable results. Keep this forever.",
+                  "Hour 2: Record a mock boardroom intro. Watch it back. Where do you shrink? Where do you shine?"
+                ]
+              },
+              trench: "This week: volunteer to open a meeting with a 2-minute context-setter. Use your Evidence Anchor. Notice how the room's energy shifts toward you."
+            },
+            {
+              week: 4,
+              theme: "Energy Is Strategy",
+              mindset: "Low Energy = Lost Rooms",
+              skill: "Vocal Dynamics, Pacing & Intentional Enthusiasm",
+              framework: {
+                name: "The Energy Dial (1–10 Scale)",
+                description: "Most professionals speak at a 4 (flat, safe). A boardroom needs a 6. A keynote needs an 8. A crisis briefing needs a controlled 7. The Energy Dial teaches you to consciously calibrate your energy level to the room's need."
+              },
+              tracks: {
+                daily: [
+                  "Day 1–2: Speak a 3-min topic at Energy Level 3, then 6, then 9. Record all three. Hear the difference.",
+                  "Day 3–4: 'Enthusiasm injection' — pick one moment in today's meetings to spike your energy intentionally.",
+                  "Day 5: Full-day challenge — no monotone. Every sentence gets a varied pitch or pace shift."
+                ],
+                alternate: [
+                  "Session 1: Study vocal dynamics in TED Talks (Simon Sinek, Brené Brown). Transcribe their energy shifts.",
+                  "Session 2: Roleplay — deliver a bad-news message at Energy Level 7 (serious, not flat). Practice gravitas.",
+                  "Session 3: Speed rounds — deliver 5 different types of messages each at the right dial setting."
+                ],
+                weekend: [
+                  "Hour 1: Phase 1 full review — rewatch all your recordings from Weeks 1–4. Document your top 3 growth edges.",
+                  "Hour 2: Record your 'Phase 1 Capstone' — a 10-minute talk on any topic using all 4 frameworks learned."
+                ]
+              },
+              trench: "Before your next big presentation, physically warm up your voice for 3 minutes (humming, lip trills, tongue twisters). Walk in at Energy Level 7. Watch the room's posture change to match yours."
+            }
+          ]
+        },
+        {
+          phase: 2,
+          label: "ELEVATION",
+          subtitle: "Month 2 — Weeks 5–8",
+          tagline: "High Stakes. High Pressure. High Performance.",
+          color: "#7B9E87",
+          weeks: [
+            {
+              week: 5,
+              theme: "The Art of the Pitch",
+              mindset: "From Presenter to Persuader",
+              skill: "Pitching Ideas Across Any Audience Level",
+              framework: {
+                name: "The IPACC Pitch Model",
+                description: "Interest (hook them in 10 sec) → Problem (make them feel the pain) → Answer (your solution, simply) → Credibility (why you/your team) → Call-to-Action (one clear next step)."
+              },
+              tracks: {
+                daily: [
+                  "Day 1–2: Write an IPACC pitch for your current top project. Under 90 seconds.",
+                  "Day 3–4: Deliver your pitch to one real colleague. Ask for one word of feedback only.",
+                  "Day 5: Refine and re-deliver. Focus: does the hook land in 10 seconds?"
+                ],
+                alternate: [
+                  "Session 1: Deconstruct 3 famous pitches (Steve Jobs iPhone, Elon Musk Tesla). Map to IPACC.",
+                  "Session 2: Roleplay — pitch a controversial idea to a skeptical audience. Handle pushback in real time.",
+                  "Session 3: 'Elevator Gauntlet' — 60-second pitches, 5 rounds, different audience types each time."
+                ],
+                weekend: [
+                  "Hour 1: Build 3 versions of your core pitch — for direct reports, C-suite, and external clients.",
+                  "Hour 2: Full pitch rehearsal with video. Invite a trusted colleague to give live feedback."
+                ]
+              },
+              trench: "This week: find one real opportunity to pitch an idea in a meeting — even informally. Use IPACC. Measure engagement by how many follow-up questions you receive."
+            },
+            {
+              week: 6,
+              theme: "Mastering High-Stakes Q&A",
+              mindset: "From Fear of Questions to Hunger for Them",
+              skill: "Handling Hostile, Ambiguous & Curveball Questions",
+              framework: {
+                name: "The HEARD Response System",
+                description: "Hear (listen fully) → Echo (restate the question) → Acknowledge (validate concern) → Respond (answer clearly) → Direct (land with a point or pivot). Turns every Q&A into a trust-building moment."
+              },
+              tracks: {
+                daily: [
+                  "Day 1–2: List 10 hardest questions someone could ask you professionally. Write HEARD responses for each.",
+                  "Day 3–4: Practice answering 3 of them aloud, standing, timed (90 sec max per answer).",
+                  "Day 5: In today's meetings — volunteer to take a question you'd normally deflect."
+                ],
+                alternate: [
+                  "Session 1: Study political press briefings and CEO earnings calls for Q&A tactics.",
+                  "Session 2: Hostile Q&A roleplay — have a colleague throw your 10 hardest questions at you aggressively.",
+                  "Session 3: 'No I Don't Know' drill — practice bridging from uncertainty to confidence without lying."
+                ],
+                weekend: [
+                  "Hour 1: Create your personal 'Q&A War Room' — top 20 questions by category: strategic, technical, personal.",
+                  "Hour 2: Full mock Q&A session. Record. Review for composure and clarity."
+                ]
+              },
+              trench: "After your next presentation, deliberately invite the hardest question: 'I'd love to hear the toughest challenge anyone has with this.' Then use HEARD. Watch credibility skyrocket."
+            }
+          ]
+        }
+      ]
+    };
+
+    // Render Filtering Controls
+    const tabsContainer = document.getElementById('tracks-tabs');
+    courseData.tracks.forEach(track => {
+        const btn = document.createElement('button');
+        btn.className = 'tab-btn';
+        btn.setAttribute('data-track', track.id);
+        btn.innerHTML = `
+            <h4><span style="color:${track.color}">${track.icon}</span> ${track.label}: ${track.name}</h4>
+            <p>${track.schedule}</p>
+        `;
+        tabsContainer.appendChild(btn);
+    });
+
+    // Render Syllabus Items
+    const mainContainer = document.getElementById('syllabus-content');
+    
+    function renderSyllabus() {
+        mainContainer.innerHTML = '';
+        courseData.phases.forEach(p => {
+            const phaseSection = document.createElement('section');
+            phaseSection.className = 'phase-block';
+            
+            let weeksHtml = '';
+            p.weeks.forEach(w => {
+                weeksHtml += `
+                    <div class="week-card">
+                        <div class="week-number">Week ${w.week}</div>
+                        <h3 class="week-theme">${w.theme}</h3>
+                        
+                        <div class="meta-grid">
+                            <div class="meta-item">
+                                <h5>Core Mindset</h5>
+                                <p>${w.mindset}</p>
+                            </div>
+                            <div class="meta-item">
+                                <h5>Skill Target</h5>
+                                <p>${w.skill}</p>
+                            </div>
+                        </div>
+
+                        <div class="framework-box">
+                            <h4>⚙️ Core Framework: ${w.framework.name}</h4>
+                            <p>${w.framework.description}</p>
+                        </div>
+
+                        <div class="tracks-drilldown">
+                            <div class="track-drill-item daily" data-drill="daily">
+                                <h5>⚡ Track A: Daily Drill</h5>
+                                <ul>${w.tracks.daily.map(li => `<li>${li}</li>`).join('')}</ul>
+                            </div>
+                            <div class="track-drill-item alternate" data-drill="alternate">
+                                <h5>🧠 Track B: Deep Skill</h5>
+                                <ul>${w.tracks.alternate.map(li => `<li>${li}</li>`).join('')}</ul>
+                            </div>
+                            <div class="track-drill-item weekend" data-drill="weekend">
+                                <h5>🔬 Track C: Weekend Lab</h5>
+                                <ul>${w.tracks.weekend.map(li => `<li>${li}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+
+                        <div class="trench-box">
+                            <strong>In The Trenches Challenge</strong>
+                            <p>${w.trench}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            phaseSection.innerHTML = `
+                <div class="phase-header" style="border-color: ${p.color}">
+                    <span class="phase-badge" style="color: ${p.color}">PHASE ${p.phase}: ${p.label}</span>
+                    <h2 class="phase-title">${p.subtitle}</h2>
+                    <p class="phase-tagline">${p.tagline}</p>
+                </div>
+                ${weeksHtml}
+            `;
+            mainContainer.appendChild(phaseSection);
+        });
+    }
+
+    renderSyllabus();
+
+    // Setup Interactive Tab Event Listeners
+    document.querySelectorAll('.tab-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            const selectedTrack = button.getAttribute('data-track');
+            
+            document.querySelectorAll('.track-drill-item').forEach(item => {
+                if (selectedTrack === 'all' || item.getAttribute('data-drill') === selectedTrack) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
